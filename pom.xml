@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.fingerprintsoft.io</groupId>
+	<artifactId>excel-tools</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Excel Tools</name>
+	<organization>
+		<name>Fingerprints Software</name>
+		<url>www.fingerprintsoft.co</url>
+	</organization>
+
+	<repositories>
+		<repository>
+			<id>JBOSS</id>
+			<name>JBoss Repository</name>
+			<url>http://repository.jboss.org/maven2/</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<groupId>jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.5</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+	<properties>
+		<maven.compiler.source>5</maven.compiler.source>
+		<maven.compiler.target>5</maven.compiler.target>
+	</properties>
+	<modules>
+	</modules>
+
+</project>
