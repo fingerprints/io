@@ -6,6 +6,15 @@
 	<artifactId>excel-tools</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Excel Tools</name>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>http://github.com/fingerprints/io/issues</url>
+	</issueManagement>
+	<scm>
+		<connection>scm:git:git@github.com:fingerprints/io.git</connection>
+		<developerConnection>scm:git:git@github.com:fingerprints/io.git</developerConnection>
+		<url>scm:git:git@github.com:fingerprints/io.git</url>
+	</scm>
 	<organization>
 		<name>Fingerprints Software</name>
 		<url>www.fingerprintsoft.co</url>
