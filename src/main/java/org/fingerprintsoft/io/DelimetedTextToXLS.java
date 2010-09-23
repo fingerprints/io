@@ -47,7 +47,7 @@ public class DelimetedTextToXLS {
     public static final DelimetedTextToXLS TAB_SEPERATED_VALUE = new DelimetedTextToXLS(
             String.valueOf("\t"));
     public static final DelimetedTextToXLS PIPE_SEPERATED_VALUE = new DelimetedTextToXLS(
-            String.valueOf("|"));
+            String.valueOf("\\|"));
     public static final DelimetedTextToXLS SPACE_SEPERATED_VALUE = new DelimetedTextToXLS(
             String.valueOf(" "));
 
@@ -57,7 +57,8 @@ public class DelimetedTextToXLS {
         this.delimeter = delimeter;
     }
 
-    public void execute(String inputFilePath, String outputFilePath) {
+    public void execute(String inputFilePath, String outputFilePath)
+            throws FileNotFoundException, IOException {
         Validate.notNull(inputFilePath);
         Validate.notNull(outputFilePath);
         List<List<String>> rows = read(inputFilePath);
@@ -70,7 +71,8 @@ public class DelimetedTextToXLS {
      * @param path
      * @return
      */
-    protected List<List<String>> read(String path) {
+    protected List<List<String>> read(String path)
+            throws FileNotFoundException, IOException {
         List<List<String>> rows = null;
         List<String> cells = null;
         String rowText = null;
@@ -90,17 +92,11 @@ public class DelimetedTextToXLS {
             int i = 0;
             rows = new ArrayList<List<String>>();
             while ((rowText = bufferedReader.readLine()) != null) {
-                String[] cell = rowText.split(delimeter);
+                String[] cell = rowText.split(getDelimeter());
                 cells = Arrays.asList(cell);
                 rows.add(cells);
                 i++;
             }
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } finally {
             try {
                 if (fileInputStream != null) {
@@ -133,8 +129,12 @@ public class DelimetedTextToXLS {
         WritableWorkbook workbook = null;
         try {
             File file = new File(path);
+            String sheetName = path.substring(
+                    path.lastIndexOf(File.separatorChar) + 1,
+                    path.lastIndexOf("."));
+
             workbook = Workbook.createWorkbook(file);
-            WritableSheet sheet = workbook.createSheet("First Sheet", 0);
+            WritableSheet sheet = workbook.createSheet(sheetName, 0);
 
             int rowNumber = 0;
             for (List<String> cells : rows) {
@@ -172,6 +172,14 @@ public class DelimetedTextToXLS {
             }
         }
 
+    }
+
+    public String getDelimeter() {
+        return delimeter;
+    }
+
+    public void setDelimeter(String delimeter) {
+        this.delimeter = delimeter;
     }
 
 }
