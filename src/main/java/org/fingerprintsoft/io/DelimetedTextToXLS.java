@@ -16,23 +16,9 @@
  */
 package org.fingerprintsoft.io;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import jxl.Workbook;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
 
 import org.apache.commons.lang.Validate;
 
@@ -43,143 +29,35 @@ import org.apache.commons.lang.Validate;
 public class DelimetedTextToXLS {
 
     public static final DelimetedTextToXLS COMMA_SEPERATED_VALUE = new DelimetedTextToXLS(
-            String.valueOf(","));
+            DelimitedTextFileReader.COMMA_SEPERATED_VALUE);
     public static final DelimetedTextToXLS TAB_SEPERATED_VALUE = new DelimetedTextToXLS(
-            String.valueOf("\t"));
+            DelimitedTextFileReader.TAB_SEPERATED_VALUE);
     public static final DelimetedTextToXLS PIPE_SEPERATED_VALUE = new DelimetedTextToXLS(
-            String.valueOf("\\|"));
+            DelimitedTextFileReader.PIPE_SEPERATED_VALUE);
     public static final DelimetedTextToXLS SPACE_SEPERATED_VALUE = new DelimetedTextToXLS(
-            String.valueOf(" "));
+            DelimitedTextFileReader.TAB_SEPERATED_VALUE);
 
-    private String delimeter;
-
-    private DelimetedTextToXLS(String delimeter) {
-        this.delimeter = delimeter;
+    private DelimitedTextFileReader reader;
+    
+    public DelimetedTextToXLS(DelimitedTextFileReader reader) {
+        this.reader = reader;
     }
 
     public void execute(String inputFilePath, String outputFilePath)
             throws FileNotFoundException, IOException {
         Validate.notNull(inputFilePath);
         Validate.notNull(outputFilePath);
-        List<List<String>> rows = read(inputFilePath);
-        write(outputFilePath, rows);
+        List<List<String>> rows = this.reader.read(inputFilePath);
+        XLSFileWriter.write(outputFilePath, rows);
 
     }
 
-    /**
-     * 
-     * @param path
-     * @return
-     */
-    protected List<List<String>> read(String path)
-            throws FileNotFoundException, IOException {
-        List<List<String>> rows = null;
-        List<String> cells = null;
-        String rowText = null;
-        FileInputStream fileInputStream = null;
-        DataInputStream dataInputStream = null;
-        InputStreamReader inputStreamReader = null;
-        BufferedReader bufferedReader = null;
-        try {
-            fileInputStream = new FileInputStream(path);
-
-            dataInputStream = new DataInputStream(fileInputStream);
-
-            inputStreamReader = new InputStreamReader(dataInputStream);
-
-            bufferedReader = new BufferedReader(inputStreamReader);
-
-            int i = 0;
-            rows = new ArrayList<List<String>>();
-            while ((rowText = bufferedReader.readLine()) != null) {
-                String[] cell = rowText.split(getDelimeter());
-                cells = Arrays.asList(cell);
-                rows.add(cells);
-                i++;
-            }
-        } finally {
-            try {
-                if (fileInputStream != null) {
-                    fileInputStream.close();
-
-                }
-                if (dataInputStream != null) {
-                    dataInputStream.close();
-                }
-                if (inputStreamReader != null) {
-                    inputStreamReader.close();
-                }
-                if (bufferedReader != null) {
-                    bufferedReader.close();
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return rows;
+    public DelimitedTextFileReader getReader() {
+        return reader;
     }
 
-    /**
-     * 
-     * @param path
-     * @param rows
-     */
-    protected void write(String path, List<List<String>> rows) {
-        WritableWorkbook workbook = null;
-        try {
-            File file = new File(path);
-            String sheetName = path.substring(
-                    path.lastIndexOf(File.separatorChar) + 1,
-                    path.lastIndexOf("."));
-
-            workbook = Workbook.createWorkbook(file);
-            WritableSheet sheet = workbook.createSheet(sheetName, 0);
-
-            int rowNumber = 0;
-            for (List<String> cells : rows) {
-                int cellNumber = 0;
-                for (String cell : cells) {
-                    Label label = new Label(cellNumber, rowNumber, cell);
-                    sheet.addCell(label);
-                    cellNumber++;
-                }
-                rowNumber++;
-            }
-
-            workbook.write();
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (RowsExceededException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (WriteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } finally {
-            try {
-                if (workbook != null) {
-                    workbook.close();
-                }
-            } catch (WriteException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-    public String getDelimeter() {
-        return delimeter;
-    }
-
-    public void setDelimeter(String delimeter) {
-        this.delimeter = delimeter;
+    public void setReader(DelimitedTextFileReader reader) {
+        this.reader = reader;
     }
 
 }
