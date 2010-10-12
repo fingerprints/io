@@ -55,8 +55,8 @@ public class DelimetedTextToXLSTest {
         try {
             DelimetedTextToXLS.PIPE_SEPERATED_VALUE
                     .execute(
-                            "/home/fuzail_s/workspaces/projects/fingerprints/io/src/test/resources/test.psv",
-                            "/tmp/textpsv.xls");
+                            "/home/fuzail_s/workspaces/projects/fingerprints/io/src/test/resources/1002Q-00050778.dat",
+                            "/tmp/1002Q-00050778.dat.xls");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());
@@ -65,7 +65,7 @@ public class DelimetedTextToXLSTest {
             Assert.fail(e.getMessage());
         }
 
-        File file = new File("/tmp/textpsv.xls");
+        File file = new File("/tmp/1002Q-00050778.dat.xls");
         Assert.assertTrue(file.exists());
     }
 

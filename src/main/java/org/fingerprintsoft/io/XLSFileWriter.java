@@ -48,6 +48,9 @@ public class XLSFileWriter {
             for (List<String> cells : rows) {
                 int cellNumber = 0;
                 for (String cell : cells) {
+                    if(cell == null) {
+                        cell = String.valueOf("");
+                    }
                     Label label = new Label(cellNumber, rowNumber, cell);
                     sheet.addCell(label);
                     cellNumber++;
